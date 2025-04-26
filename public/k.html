@@ -1,0 +1,105 @@
+<html lang="en">
+
+<head>
+   <title>
+      Javascript getElementByClassName
+   </title>
+   <style>
+     
+   </style>
+</head>
+
+<body>
+   <nav id="menu">
+      <a class="item" name="item 1" href="/html/">HTML</a>
+      <a class="item" name="item 2" href="/css/">CSS</a>
+      <a class="item highlight" name="item 3" href="/js/">Javascript</a>
+   </nav>
+   <h2> DOM Tree Demo: Menu Manipulation</h2>
+   Menu item data #1: <input id='data_1' type="text"><br>
+   Menu item data #2: <input id='data_2' type="text"><br>
+
+   <input type="button" value="Add menu item" onclick="addMenuItem()"/>
+   <input type="button" value="Rename menu item" onclick="renameMenuItem()"/>
+   <input type="button" value="Remove menu item" onclick="removeMenuItem()"/>
+   <script>
+      function addMenuItem(){
+         let menuName = document.querySelector("#data_1").value;
+         let menuLink = document.querySelector("#data_2").value;
+
+         if (menuName == '') {
+            window.alert("Please enter the menu item ...");
+            return;
+         }
+
+         let menu = document.querySelector("#menu");
+         let menuItem = menu.firstElementChild.cloneNode();
+         menuItem.innerHTML = menuName;
+         menuItem.setAttribute('href', menuLink);
+         menuItem.name = 'item' + (menu.getElementsByClassName("item").length + 1);
+         menu.appendChild(menuItem);
+         menu.appendChild(document.createTextNode(" | "));
+         console.log("add menu item:   ", menuName);
+
+      }
+
+      function removeMenuItem() {
+         let iText = document.querySelector("#data_1").value;
+         let iName = document.querySelector("#data_2").value;
+
+         if (iText == '' || iName == '') {
+            window.alert("Please enter the meni item ...");
+            return;
+         }
+
+         let menu = document.querySelector("#menu");
+         let selector = `[name = '${iName}']`;
+         let menuItem = menu.querySelector(selector);
+
+         if (menuItem == null) {
+            window.alert("Menu item not found: " + oldName);
+            return;
+         }
+
+         if (menuItem.textContent != iText) {
+            window.alert("Menu item text [" + menuItem.textContent + "] not match...");
+            return;
+         }
+
+         menu.removeChild(menuItem.nextSibling);
+         menu.removeChild(menuItem);
+
+         let allItems = menu.querySelectorAll(".item");
+
+         for (let i = 0; i < allItems.length; i++) {
+            allItems[i].name = "item" + (i + 1);
+
+         }
+         console.log("remove menu item: ", menuItem);
+      }
+      
+      function renameMenuItem(){
+         let oldName = document.querySelector("#data_1").value;
+         let newName = document.querySelector("#data_2"),value;
+
+         if(oldName == '' || newName == ''){
+            window.alert("Please enter the item name...");
+            return;
+         }
+
+         let menu = document.querySelector("#menu");
+         let selector = `[name = '${oldName}']`;
+         let menuItem = document.querySelector(selector);
+
+         if(menuItem == null){
+            window.alert("Menu not found: "+ oldName);
+            return;
+         }
+
+         menuItem.textContent = newName;
+         console.log("remove the item", menuItem);
+      }
+   </script>
+</body>
+
+</html>

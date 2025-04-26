@@ -1,0 +1,63 @@
+<html lang="en">
+
+<head>
+   <tittle>
+      Select Examples
+   </tittle>
+</head>
+
+<body>
+   <label for="framework">Select one or more JS Frameworks: </label><br>
+   <select id="framework" multiple>
+      <option value="1">Angular</option>
+      <option value="2">React</option>
+      <option value="3">Vue.js</option>
+      <option value="4"> Ember.js</option>
+   </select>
+   <br>
+   <button id="btn"> Get Selected Frameworks</button>
+   <br>
+
+   <p>Select your size: </p>
+   <div id="group"></div>
+   <p id = "output"></p>
+    
+   <script>
+      const btn = document.querySelector('#btn');
+      const sb = document.querySelector('#framework');
+
+      btn.onclick = (e) => {
+         e.preventDefault();
+         const selectedValues = [].filter
+            .call(sb.options, option => option.selected)
+            .map(option => option.text);
+         alert(selectedValues);
+      };
+
+      const group = document.querySelector('#group');
+      const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+      group.innerHTML = sizes.map((size) => `
+      <div>
+         <input type="radio" name="size" value="${size}" id = "${size}">
+         <label for ="${size}"> ${size} </label>
+      </div>`)
+      .join(' ');
+
+      const radioButtons = document.querySelectorAll('input[name = "size"]');
+      
+      for(const radioButton of radioButtons){
+         radioButton.addEventListener('change', showSelected);
+      }
+
+      function showSelected(){
+         console.log(e);
+
+         if(this.checked){
+            document.querySelector('#output').innerText = `You selected ${this.value}`;
+         }
+      }
+    </script>
+</body>
+
+</html>
