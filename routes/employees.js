@@ -9,11 +9,19 @@ const {
     deleteEmployee
 } = require('../controllers/employeesController');
 
-// Dinh nghia cac route
+// GET tất cả nhân viên
 route.get('/', getAllEmployees);
+
+// GET một nhân viên theo ID
 route.get('/:id', getEmployeeById);
-route.get('/', addEmployee);
-route.get('/:id', updateEmployee);
-route.get('/:id', deleteEmployee);
+
+// POST: Thêm nhân viên
+route.post('/', addEmployee);
+
+// PUT: Cập nhật nhân viên
+route.put('/:id', updateEmployee);
+
+// DELETE: Xoá nhân viên
+route.delete('/:id', deleteEmployee);
 
 module.exports = route;

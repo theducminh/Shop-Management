@@ -1,4 +1,4 @@
-require('dotenv').config;
+require('dotenv').config();
 const express = require('express');
 const sql = require('mssql');
 const cors = require('cors');
@@ -10,13 +10,13 @@ const port = process.env.PORT || 3000;
 
 //Middleware
 app.use(cors());
-app.use(express.json);
+app.use(express.json());
 app.use(express.static('public'));
 
 //Connect SQL Server
 const config ={
    user: process.env.DB_USER,
-   passwork: process.env.DB_PASSWORD,
+   password: process.env.DB_PASSWORD,
    server: process.env.DB_SERVER,
    port: parseInt(process.env.DB_PORT, 10),
    database: process.env.DB_NAME,
@@ -44,7 +44,7 @@ const connectToDatabase = async() => {
 connectToDatabase();
 
 // Match pool into response to use routes
-app.use((res, req, next) => {
+app.use((req, res, next) => {
     if(!pool){
         return res.status(500).json({error: 'Can not connect to database'});
     }
@@ -58,6 +58,6 @@ app.use('/employees', employeesRoutes);
 //Starting server
 
 app.listen(port, () => {
-    console.log('Server is running in port ${port}');
+    console.log(`Server is running in port ${port}`);
 });
 

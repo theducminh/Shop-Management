@@ -1,0 +1,169 @@
+const API_URL = 'http://localhost:3000/employees';
+
+function showTab(tabId) {
+  document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.add('hidden'));
+  document.getElementById(tabId).classList.remove('hidden');
+}
+
+function showForm() {
+  document.getElementById('employeeForm').classList.remove('hidden');
+}
+
+function closeForm() {
+  document.getElementById('employeeForm').classList.add('hidden');
+  document.getElementById('formEmployee').reset();
+  document.getElementById('employeeId').value = '';
+}
+
+// Lấy toàn bộ danh sách nhân viên
+async function fetchEmployees() {
+  try {
+    const res = await fetch(API_URL);
+    const employees = await res.json();
+    renderEmployeeTable(employees);
+  } catch (err) {
+    console.error('Lỗi khi lấy danh sách nhân viên:', err);
+  }
+}
+
+// Hiển thị bảng nhân viên
+function renderEmployeeTable(employees) {
+  const tbody = document.getElementById('employeeTableBody');
+  tbody.innerHTML = '';
+  employees.forEach((emp, idx) => {
+    const row = `
+      <tr>
+        <td class="border p-2">${idx + 1}</td>
+        <td class="border p-2">${emp.name}</td>
+        <td class="border p-2">${emp.email}</td>
+        <td class="border p-2">${emp.phone}</td>
+        <td class="border p-2">${emp.position}</td>
+        <td class="border p-2">${emp.password}</td>
+        <td class="border p-2">${emp.hire_date}</td>
+        <td class="border p-2">
+          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editEmployee(${emp.employee_id})">Sửa</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteEmployee(${emp.employee_id})">Xóa</button>
+        </td>
+      </tr>
+    `;
+    tbody.innerHTML += row;
+  });
+}
+
+// Thêm hoặc cập nhật nhân viên
+async function saveEmployee(event) {
+  event.preventDefault();
+
+  const id = document.getElementById('employeeId').value;
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const position = document.getElementById('position').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const hire_date = document.getElementById('hire_date').value;
+
+  if (!name || !email || !phone || !position || !password || !hire_date) {
+    alert('Vui lòng điền đầy đủ thông tin!');
+    return;
+  }
+
+  const data = { name, email, phone, position, password, hire_date };
+
+  try {
+    let res;
+    if (id) {
+      res = await fetch(`${API_URL}/${employee_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    } else {
+      res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    }
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      alert(result.message || 'Có lỗi xảy ra khi lưu nhân viên!');
+    } else {
+      alert(result.message);
+      closeForm();
+      fetchEmployees();
+    }
+  } catch (err) {
+    console.error('Lỗi khi lưu nhân viên:', err);
+  }
+}
+
+// Xoá nhân viên
+async function deleteEmployee(id) {
+  if (!confirm('Bạn có chắc chắn muốn xoá nhân viên này?')) return;
+
+  try {
+    const res = await fetch(`${API_URL}/${employee_id}`, {
+      method: 'DELETE'
+    });
+    const result = await res.json();
+
+    if (!res.ok) {
+      alert(result.message || 'Xóa thất bại!');
+    } else {
+      alert(result.message);
+      fetchEmployees();
+    }
+  } catch (err) {
+    console.error('Lỗi khi xóa nhân viên:', err);
+  }
+}
+
+// Chỉnh sửa nhân viên
+async function editEmployee(id) {
+  try {
+    const res = await fetch(`${API_URL}/${employee_id}`);
+    const emp = await res.json();
+
+    if (!res.ok) {
+      alert(emp.message || 'Không thể lấy thông tin nhân viên!');
+      return;
+    }
+
+    document.getElementById('employeeId').value = emp.employee_id;
+    document.getElementById('name').value = emp.name;
+    document.getElementById('email').value = emp.email;
+    document.getElementById('phone').value = emp.phone;
+    document.getElementById('position').value = emp.position;
+    document.getElementById('password').value = emp.password;
+    document.getElementById('hire_date').value = emp.hire_date;
+
+    showForm();
+  } catch (err) {
+    console.error('Lỗi khi lấy thông tin nhân viên:', err);
+  }
+}
+
+// Tìm kiếm theo tên
+function searchEmployees() {
+  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  const rows = document.querySelectorAll('#employeeTableBody tr');
+  rows.forEach(row => {
+    const name = row.children[1]?.textContent.toLowerCase();
+    row.style.display = name.includes(keyword) ? '' : 'none';
+  });
+}
+
+// Gắn sự kiện
+document.addEventListener('DOMContentLoaded', () => {
+  fetchEmployees();
+
+  const searchInput = document.querySelector('input[placeholder*="Tìm kiếm"]');
+  if (searchInput) {
+    searchInput.id = 'searchInput';
+    searchInput.addEventListener('input', searchEmployees);
+  }
+
+  document.getElementById('formEmployee')?.addEventListener('submit', saveEmployee);
+});
