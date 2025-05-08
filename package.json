@@ -19,5 +19,8 @@
   "homepage": "https://github.com/theducminh/Project-II#readme",
   "dependencies": {
     "project-ii": "file:"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.5"
   }
 }

@@ -13,15 +13,15 @@ const {
 route.get('/', getAllEmployees);
 
 // GET một nhân viên theo ID
-route.get('/:id', getEmployeeById);
+route.get('/:employee_id', getEmployeeById);
 
 // POST: Thêm nhân viên
 route.post('/', addEmployee);
 
 // PUT: Cập nhật nhân viên
-route.put('/:id', updateEmployee);
+route.put('/:employee_id', updateEmployee);
 
 // DELETE: Xoá nhân viên
-route.delete('/:id', deleteEmployee);
+route.delete('/:employee_id', deleteEmployee);
 
 module.exports = route;

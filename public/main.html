@@ -1,154 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang chủ</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="script.js" defer></script>
-  
-  </head>
 
-  <body class="h-screen flex flex-col">
-    <!-- Top Navigator -->
-    <div class="w-full bg-yellow-400 flex justify-end space-x-2 p-2">
-      <button class="px-4 py-1 rounded bg-yellow-500">Góp ý</button>
-      <button class="px-4 py-1 rounded bg-yellow-500">Hỗ trợ</button>
-      <button class="px-4 py-1 rounded bg-yellow-500">Tài khoản</button>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang chủ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="script.js" defer></script>
 
-    <div class="flex flex-1">
-      <!-- Left Navigator -->
-      <div class="w-1/6 flex flex-col">
-        <div class="bg-yellow-500 text-center py-4 font-bold">Logo</div>
-        <ul class="bg-blue-500 text-white flex-1">
-          <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('employees')">
-            Quản lí nhân viên
-          </li>
-          <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('products')">
-            Quản lí sản phẩm
-          </li>
-          <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('orders')">
-            Quản lý đơn hàng
-          </li>
-          <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('suppliers')">
-            Quản lý nhà cung cấp
-          </li>
-          <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('customers')">
-            Quản lý khách hàng
-          </li>
-        </ul>
-        <div class="bg-red-500 text-white text-center py-4">
-          Cài đặt & thương hiệu
-        </div>
-      </div>
+</head>
 
-      <!-- Main Content -->
-      <div class="flex-1 p-6 overflow-auto">
-        <!-- Nhân Viên -->
-        <div id="employees" class="tab-pane">
-          <h2 class="text-2xl font-bold mb-4">Danh Sách Nhân Viên</h2>
-          <input type="text" class="w-full mb-4 px-4 py-2 border rounded-md" placeholder="Tìm kiếm nhân viên theo tên..." />
-          <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm()" >Thêm nhân viên</button>
-          <table class="w-full border border-gray-300" id = "employeeTable">
-            <thead>
-              <tr>
-                <th class="border p-2">STT</th>
-                <th class="border p-2">Tên</th>
-                <th class="border p-2">Ngày sinh</th>
-                <th class="border p-2">Địa chỉ</th>
-                <th class="border p-2">Chức vụ</th>
-                <th class="border p-2">Mật khẩu</th>
-                <th class="border p-2">Ngày tuyển dụng</th>
-                <th class="border p-2">Hành động</th>
-              </tr>
-            </thead>
-            <tbody id = "employeeTableBody">
-              <!-- JS sẽ thêm dữ liệu tại đây -->
-            </tbody>
-          </table>
-        </div>
-        
-        <!-- Form Thêm/Sửa Nhân Viên -->
-<div id="employeeForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-    <h2 class="text-xl font-semibold mb-4">Thêm / Sửa Nhân Viên</h2>
-
-    <form id="formEmployee" class="space-y-4">
-      <input type="hidden" id="employeeId">
-
-      <div>
-        <label for="name" class="block text-sm font-medium text-gray-700">Tên</label>
-        <input type="text" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-      </div>
-
-      <div>
-        <label for="birth_date" class="block text-sm font-medium text-gray-700">Ngày Sinh</label>
-        <input type="date" id="birth_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-      </div>
-
-      <div>
-        <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
-        <input type="text" id="address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-      </div>
-
-      <div>
-        <label for="position" class="block text-sm font-medium text-gray-700">Chức vụ</label>
-        <input type="text" id="position" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-      </div>
-
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Mật khẩu</label>
-        <input type="password" id="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-      </div>
-
-      <div>
-        <label for="hire_date" class="block text-sm font-medium text-gray-700">Ngày tuyển dụng</label>
-        <input type="date" id="hire_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-      </div>
-    </form>
-
-    <div class="mt-6 flex justify-end gap-2">
-      <button onclick="closeForm()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Hủy</button>
-      <button onclick="saveEmployee(event)" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
-    </div>
-
-    <button onclick="closeForm()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-      ✕
-    </button>
+<body class="h-screen flex flex-col">
+  <!-- Top Navigator -->
+  <div class="w-full bg-yellow-400 flex justify-end space-x-2 p-2">
+    <button class="px-4 py-1 rounded bg-yellow-500">Góp ý</button>
+    <button class="px-4 py-1 rounded bg-yellow-500">Hỗ trợ</button>
+    <button class="px-4 py-1 rounded bg-yellow-500">Tài khoản</button>
   </div>
-</div>
 
-
-        <!-- Sản phẩm -->
-        <div id="products" class="tab-pane hidden">
-          <h2 class="text-2xl font-bold mb-4">Quản lý sản phẩm</h2>
-          <p>Hiển thị bảng sản phẩm ở đây</p>
-        </div>
-
-        <!-- Đơn hàng -->
-        <div id="orders" class="tab-pane hidden">
-          <h2 class="text-2xl font-bold mb-4">Quản lý đơn hàng</h2>
-          <p>Hiển thị bảng đơn hàng ở đây</p>
-        </div>
-
-        <!-- Nhà cung cấp -->
-        <div id="suppliers" class="tab-pane hidden">
-          <h2 class="text-2xl font-bold mb-4">Quản lý nhà cung cấp</h2>
-          <p>Hiển thị bảng nhà cung cấp ở đây</p>
-        </div>
-
-        <!-- Khách hàng -->
-        <div id="customers" class="tab-pane hidden">
-          <h2 class="text-2xl font-bold mb-4">Quản lý khách hàng</h2>
-          <p>Hiển thị bảng khách hàng ở đây</p>
-        </div>
+  <div class="flex flex-1">
+    <!-- Left Navigator -->
+    <div class="w-1/6 flex flex-col">
+      <div class="bg-yellow-500 text-center py-4 font-bold">Logo</div>
+      <ul class="bg-blue-500 text-white flex-1">
+        <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('employees')">
+          Quản lí nhân viên
+        </li>
+        <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('products')">
+          Quản lí sản phẩm
+        </li>
+        <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('orders')">
+          Quản lý đơn hàng
+        </li>
+        <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('suppliers')">
+          Quản lý nhà cung cấp
+        </li>
+        <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('customers')">
+          Quản lý khách hàng
+        </li>
+      </ul>
+      <div class="bg-red-500 text-white text-center py-4">
+        Cài đặt & thương hiệu
       </div>
     </div>
 
-     <!-- Footer -->
-     <footer class="text-center" style="margin-top: 30px;">
-      <p>&copy; 2024 Quản Lý Nhân Viên và Sản Phẩm | Thiết kế bởi <a href="#">Ducminh</a></p>
+    <!-- Main Content -->
+    <div class="flex-1 p-6 overflow-auto">
+      <!-- Nhân Viên -->
+      <div id="employees" class="tab-pane">
+        <h2 class="text-2xl font-bold mb-4">Danh Sách Nhân Viên</h2>
+        <input type="text" class="w-full mb-4 px-4 py-2 border rounded-md"
+          placeholder="Tìm kiếm nhân viên theo tên..." />
+        <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm()">Thêm nhân
+          viên</button>
+        <table class="w-full border border-gray-300" id="employeeTable">
+          <thead>
+            <tr>
+              <th class="border p-2">STT</th>
+              <th class="border p-2">Tên</th>
+              <th class="border p-2">Ngày sinh</th>
+              <th class="border p-2">Địa chỉ</th>
+              <th class="border p-2">Chức vụ</th>
+              <th class="border p-2">Mật khẩu</th>
+              <th class="border p-2">Ngày tuyển dụng</th>
+              <th class="border p-2">Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="employeeTableBody">
+            <!-- JS sẽ thêm dữ liệu tại đây -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Form Thêm/Sửa Nhân Viên -->
+      <div id="employeeForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <h2 class="text-xl font-semibold mb-4">Thêm / Sửa Nhân Viên</h2>
+
+          <form id="formEmployee" class="space-y-4">
+            <input type="hidden" id="employeeId">
+
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700">Tên</label>
+              <input type="text" id="name"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700">Email</label>
+              <input type="text" id="email"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+
+            <div>
+              <label for="address" class="block text-sm font-medium text-gray-700">Điện thoại</label>
+              <input type="text" id="phone"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+
+            <div>
+              <label for="position" class="block text-sm font-medium text-gray-700">Chức vụ</label>
+              <input type="text" id="position"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700">Mật khẩu</label>
+              <input type="password" id="password"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+
+            <div>
+              <label for="hire_date" class="block text-sm font-medium text-gray-700">Ngày tuyển dụng</label>
+              <input type="date" id="hire_date"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+          </form>
+
+          <div class="mt-6 flex justify-end gap-2">
+            <button onclick="closeForm()"
+              class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Hủy</button>
+            <button onclick="saveEmployee(event)" type="submit"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
+          </div>
+
+          <button onclick="closeForm()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+            ✕
+          </button>
+        </div>
+      </div>
+
+
+      <!-- Sản phẩm -->
+      <div id="products" class="tab-pane hidden">
+        <h2 class="text-2xl font-bold mb-4">Quản lý sản phẩm</h2>
+        <p>Hiển thị bảng sản phẩm ở đây</p>
+      </div>
+
+      <!-- Đơn hàng -->
+      <div id="orders" class="tab-pane hidden">
+        <h2 class="text-2xl font-bold mb-4">Quản lý đơn hàng</h2>
+        <p>Hiển thị bảng đơn hàng ở đây</p>
+      </div>
+
+      <!-- Nhà cung cấp -->
+      <div id="suppliers" class="tab-pane hidden">
+        <h2 class="text-2xl font-bold mb-4">Quản lý nhà cung cấp</h2>
+        <p>Hiển thị bảng nhà cung cấp ở đây</p>
+      </div>
+
+      <!-- Khách hàng -->
+      <div id="customers" class="tab-pane hidden">
+        <h2 class="text-2xl font-bold mb-4">Quản lý khách hàng</h2>
+        <p>Hiển thị bảng khách hàng ở đây</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center" style="margin-top: 30px;">
+    <p>&copy; 2024 Quản Lý Nhân Viên và Sản Phẩm | Thiết kế bởi <a href="#">Ducminh</a></p>
   </footer>
-  </body>
+</body> 
 </html>

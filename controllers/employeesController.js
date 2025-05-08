@@ -13,11 +13,12 @@ exports.getAllEmployees = async (req, res) => {
 
 // Lấy chi tiết nhân viên theo ID
 exports.getEmployeeById = async (req, res) => {
-  const { id } = req.params;
+  const employeeId = parseInt(req.params.employee_id);
+
   try {
-    const result = await req.pool.request()
-      .input('id', sql.Int, id)
-      .query('SELECT * FROM Employees WHERE employee_id = @employee_id');
+      const result = await req.pool.request()
+        .input('id', sql.Int, employeeId)
+        .query('SELECT * FROM Employees WHERE employee_id = @id');
 
     if (result.recordset.length > 0) {
       res.json(result.recordset[0]);
@@ -30,6 +31,7 @@ exports.getEmployeeById = async (req, res) => {
   }
 };
 
+
 // Thêm nhân viên mới
 exports.addEmployee = async (req, res) => {
   const { name, email, phone, position, password, hire_date } = req.body;
@@ -41,7 +43,7 @@ exports.addEmployee = async (req, res) => {
 
   try {
     const query = 
-      `INSERT INTO employees (name, email, phone, position, password, hire_date)
+      `INSERT INTO Employees (name, email, phone, position, password, hire_date)
       VALUES (@name, @email, @phone, @position, @password, @hire_date)`;
 
     await req.pool.request()
@@ -62,18 +64,18 @@ exports.addEmployee = async (req, res) => {
 
 // Cập nhật thông tin nhân viên
 exports.updateEmployee = async (req, res) => {
-  const { id } = req.params;
+  const { employee_id } = req.params;
   const { name, email, phone, position, password, hire_date } = req.body;
 
   try {
     const query = 
-      `UPDATE employees
+      `UPDATE Employees
       SET name = @name, email = @email, phone = @phone, position = @position,
           password = @password, hire_date = @hire_date
-      WHERE employee_id = @id`;
+      WHERE employee_id = @employee_id`;
 
     await req.pool.request()
-      .input('id', sql.Int, id)
+      .input('employee_id', sql.Int, employee_id)
       .input('name', sql.NVarChar, name)
       .input('email', sql.NVarChar, email)
       .input('phone', sql.NVarChar, phone)
@@ -91,12 +93,12 @@ exports.updateEmployee = async (req, res) => {
 
 // Xoá nhân viên
 exports.deleteEmployee = async (req, res) => {
-  const { id } = req.params;
+  const { employee_id } = req.params;
 
   try {
     await req.pool.request()
-      .input('id', sql.Int, id)
-      .query('DELETE FROM employees WHERE employee_id = @employee_id');
+      .input('employee_id', sql.Int, employee_id)
+      .query('DELETE FROM Employees WHERE employee_id = @employee_id');
 
     res.json({ message: 'Nhân viên đã được xoá!' });
   } catch (err) {

@@ -33,7 +33,6 @@ let pool;
 const connectToDatabase = async() => {
     try{
        pool = await sql.connect(config);
-       console.log('Connected to database!');
     }
     catch(err){
        console.error('Error to connect to SQL Server!', err.message);

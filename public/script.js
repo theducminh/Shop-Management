@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/employees';
+const API_URL = 'http://localhost:3000/Employees';
 
 function showTab(tabId) {
   document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.add('hidden'));
@@ -24,7 +24,7 @@ async function fetchEmployees() {
   } catch (err) {
     console.error('Lỗi khi lấy danh sách nhân viên:', err);
   }
-}
+} 
 
 // Hiển thị bảng nhân viên
 function renderEmployeeTable(employees) {
@@ -54,12 +54,12 @@ function renderEmployeeTable(employees) {
 async function saveEmployee(event) {
   event.preventDefault();
 
-  const id = document.getElementById('employeeId').value;
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const position = document.getElementById('position').value.trim();
-  const password = document.getElementById('password').value.trim();
+  const employee_id = document.getElementById('employeeId').value;
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const position = document.getElementById('position').value;
+  const password = document.getElementById('password').value;
   const hire_date = document.getElementById('hire_date').value;
 
   if (!name || !email || !phone || !position || !password || !hire_date) {
@@ -71,7 +71,7 @@ async function saveEmployee(event) {
 
   try {
     let res;
-    if (id) {
+    if (employee_id) {
       res = await fetch(`${API_URL}/${employee_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -100,28 +100,20 @@ async function saveEmployee(event) {
 }
 
 // Xoá nhân viên
-async function deleteEmployee(id) {
-  if (!confirm('Bạn có chắc chắn muốn xoá nhân viên này?')) return;
-
-  try {
-    const res = await fetch(`${API_URL}/${employee_id}`, {
-      method: 'DELETE'
-    });
-    const result = await res.json();
-
-    if (!res.ok) {
-      alert(result.message || 'Xóa thất bại!');
-    } else {
-      alert(result.message);
-      fetchEmployees();
+async function deleteEmployee(employee_id) {
+  if (confirm('Bạn có chắc chắn muốn xóa nhân viên này?')) {
+    try {
+        await fetch(`${API_URL}/${employee_id}`, { method: 'DELETE' });
+        alert('Xóa nhân viên thành công!');
+        fetchEmployees(); // Cập nhật lại danh sách sau khi xóa
+    } catch (error) {
+        console.error('Lỗi khi xóa nhân viên:', error);
     }
-  } catch (err) {
-    console.error('Lỗi khi xóa nhân viên:', err);
-  }
+}
 }
 
 // Chỉnh sửa nhân viên
-async function editEmployee(id) {
+async function editEmployee(employee_id) {
   try {
     const res = await fetch(`${API_URL}/${employee_id}`);
     const emp = await res.json();
@@ -142,6 +134,7 @@ async function editEmployee(id) {
     showForm();
   } catch (err) {
     console.error('Lỗi khi lấy thông tin nhân viên:', err);
+    alert("Đã có lỗi xảy ra khi chỉnh sửa nhân viên.");
   }
 }
 
