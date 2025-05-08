@@ -21,7 +21,7 @@
   <div class="flex flex-1">
     <!-- Left Navigator -->
     <div class="w-1/6 flex flex-col">
-      <div class="bg-yellow-500 text-center py-4 font-bold">Logo</div>
+      <div class="bg-yellow-500 text-center py-4 font-bold" onclick="showTab('home')">Trang chủ</div>
       <ul class="bg-blue-500 text-white flex-1">
         <li class="hover:bg-blue-600 py-3 text-center cursor-pointer" onclick="showTab('employees')">
           Quản lí nhân viên
@@ -46,8 +46,64 @@
 
     <!-- Main Content -->
     <div class="flex-1 p-6 overflow-auto">
+      <!--Trang chủ-->
+      <div id="home" class="tab-pane">
+        <div class="bg-white p-6 rounded-lg shadow-md space-y-8">
+          <!-- Giới thiệu chung -->
+          <section>
+            <h1 class="text-3xl font-bold text-blue-700 mb-3">Chào mừng đến với Siêu Thị ABC!</h1>
+            <p class="text-gray-700 text-lg">
+              Siêu Thị ABC là điểm đến mua sắm lý tưởng dành cho mọi gia đình. Chúng tôi cung cấp hàng ngàn mặt hàng đa dạng từ thực phẩm, đồ dùng gia đình, đồ điện tử, đến sản phẩm chăm sóc cá nhân, với phương châm: <strong>"Chất lượng - Giá tốt - Phục vụ tận tâm"</strong>.
+            </p>
+          </section>
+      
+          <!-- Đội ngũ -->
+          <section>
+            <h2 class="text-2xl font-semibold text-green-700 mb-2">Đội ngũ nhân viên chuyên nghiệp</h2>
+            <p class="text-gray-700">
+              Với hơn 200 nhân viên được đào tạo bài bản, thân thiện và tận tình, Siêu Thị ABC luôn sẵn sàng hỗ trợ khách hàng trong mọi nhu cầu. Đội ngũ quản lý giàu kinh nghiệm luôn không ngừng đổi mới để mang lại trải nghiệm tốt nhất.
+            </p>
+          </section>
+      
+          <!-- Giá cả và chất lượng -->
+          <section>
+            <h2 class="text-2xl font-semibold text-yellow-700 mb-2">Giá cả hợp lý, chất lượng đảm bảo</h2>
+            <p class="text-gray-700">
+              Chúng tôi luôn cam kết cung cấp sản phẩm với giá cả cạnh tranh đi kèm chất lượng rõ ràng, nguồn gốc xuất xứ minh bạch. Đặc biệt, các mặt hàng tươi sống luôn được kiểm tra kỹ lưỡng mỗi ngày.
+            </p>
+          </section>
+      
+          <!-- Tin tức và khuyến mãi -->
+          <section>
+            <h2 class="text-2xl font-semibold text-red-600 mb-2">Tin tức & Khuyến mãi nổi bật</h2>
+            <ul class="list-disc list-inside text-gray-700">
+              <li>🎉 Mừng sinh nhật Siêu Thị ABC - Giảm giá lên đến 50% từ 10–20/5!</li>
+              <li>🍎 Mua 1 tặng 1 các mặt hàng trái cây tươi từ 6–10/5.</li>
+              <li>🛒 Freeship đơn hàng từ 300.000đ trong bán kính 5km.</li>
+            </ul>
+          </section>
+      
+          <!-- Uy tín và cam kết -->
+          <section>
+            <h2 class="text-2xl font-semibold text-indigo-700 mb-2">Uy tín tạo nên thương hiệu</h2>
+            <p class="text-gray-700">
+              Với hơn 10 năm hoạt động, Siêu Thị ABC đã và đang nhận được sự tin tưởng từ hàng triệu khách hàng. Chúng tôi cam kết:
+            </p>
+            <ul class="list-disc list-inside text-gray-700 mt-2">
+              <li>✅ Hoàn tiền 100% nếu sản phẩm không đúng mô tả</li>
+              <li>✅ Giao hàng nhanh, đúng hẹn</li>
+              <li>✅ Hệ thống hỗ trợ khách hàng 24/7</li>
+            </ul>
+          </section>
+      
+          <!-- Hình ảnh -->
+          <section>
+            <img src="anhsieuthi.jpg" alt="Hình ảnh siêu thị" class="w-full rounded-md shadow-md mt-4">
+          </section>
+        </div>
+      </div>
       <!-- Nhân Viên -->
-      <div id="employees" class="tab-pane">
+      <div id="employees" class="tab-pane hidden">
         <h2 class="text-2xl font-bold mb-4">Danh Sách Nhân Viên</h2>
         <input type="text" class="w-full mb-4 px-4 py-2 border rounded-md"
           placeholder="Tìm kiếm nhân viên theo tên..." />
@@ -163,9 +219,27 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="text-center" style="margin-top: 30px;">
-    <p>&copy; 2024 Quản Lý Nhân Viên và Sản Phẩm | Thiết kế bởi <a href="#">Ducminh</a></p>
-  </footer>
+<!-- Footer -->
+<footer class="bg-gray-800 text-gray-200 py-6 mt-10">
+  <div class="max-w-4xl mx-auto px-4 text-center space-y-2">
+    <h2 class="text-xl font-semibold text-white">Siêu Thị ABC</h2>
+    <p><strong>Địa chỉ:</strong> 123 Đường Nguyễn Văn Cừ, Quận 5, TP. Hồ Chí Minh</p>
+    <p>
+      <strong>Website:</strong>
+      <a href="https://sieuthiabc.vn" class="text-blue-400 hover:underline">sieuthiabc.vn</a>
+    </p>
+    <p>
+      <strong>Email:</strong>
+      <a href="mailto:lienhe@sieuthiabc.vn" class="text-blue-400 hover:underline">lienhe@sieuthiabc.vn</a>
+    </p>
+    <p>
+      <strong>Điện thoại:</strong>
+      <a href="tel:02812345678" class="text-blue-400 hover:underline">(028) 1234 5678</a>
+    </p>
+    <p class="text-sm text-gray-400 mt-4">&copy; 2024 Siêu Thị ABC. Thiết kế bởi <a href="#" class="hover:underline text-blue-400">Ducminh</a>.</p>
+  </div>
+</footer>
+
+
 </body> 
 </html>
