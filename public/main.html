@@ -60,6 +60,7 @@
         Cài đặt & thương hiệu
       </div>
     </div>
+    
 
     <!-- Main Content -->
     <div class="flex-1 p-6 overflow-auto">
@@ -299,15 +300,148 @@
       <!-- Nhà cung cấp -->
       <div id="suppliers" class="tab-pane hidden">
         <h2 class="text-2xl font-bold mb-4">Quản lý nhà cung cấp</h2>
-        <p>Hiển thị bảng nhà cung cấp ở đây</p>
+        <input type="text" class="w-full mb-4 px-4 py-2 border rounded-md"
+          placeholder="Tìm kiếm nhà cung cấp" />
+        <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm('supplierForm')">Thêm nhà
+          cung cấp</button>
+        <table class="w-full border border-gray-300" id="supplierTable">
+          <thead>
+            <tr>
+              <th class="border p-2">STT</th>
+              <th class="border p-2">Tên nhà cung cấp</th>
+              <th class="border p-2">Số điện thoại</th>
+              <th class="border p-2">Email</th>
+              <th class="border p-2">Địa chỉ</th>
+              <th class="border p-2">Hành động</th>
+
+            </tr>
+          </thead>
+          <tbody id="supplierTableBody">
+            <!-- JS sẽ thêm dữ liệu tại đây -->
+          </tbody>
+        </table>
+      </div>
+
+        <!-- Form Thêm/Sửa Nhà Cung Cấp -->
+        <div id="supplierForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+          <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <h2 class="text-xl font-semibold mb-4">Thêm / Sửa Nhà Cung Cấp</h2>
+
+            <form id="formSupplier" class="space-y-4">
+              <input type="hidden" id="supplierId">
+
+              <div>
+                <label for="supplierName" class="block text-sm font-medium text-gray-700">Tên nhà cung cấp</label>
+                <input type="text" id="supplierName"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required>
+              </div>
+
+              <div>
+                <label for="supplierPhone" class="block text -sm font-medium text-gray-700">Số điện thoại</label>
+                <input type="text" id="supplierPhone"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required> 
+               </div>
+              <div>
+                <label for="supplierEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="text" id="supplierEmail"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required>
+              </div>
+              <div>
+                <label for="supplierAddress" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+                <input type="text" id="supplierAddress"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  required>
+                </div>
+            </form>
+            
+            <div class="mt-6 flex justify-end gap-2">
+              <button onclick="closeForm('supplierForm')"
+                class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Hủy</button>
+              <button onclick="saveSupplier(event)" type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
+            </div>
+            <button onclick="closeForm('supplierForm')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+              ✕
+            </button>
+          </div>
       </div>
 
       <!-- Khách hàng -->
       <div id="customers" class="tab-pane hidden">
         <h2 class="text-2xl font-bold mb-4">Quản lý khách hàng</h2>
-        <p>Hiển thị bảng khách hàng ở đây</p>
+        <input type="text" class="w-full mb-4 px-4 py-2 border rounded-md"
+          placeholder="Tìm kiếm khách hàng" />
+        <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm('customerForm')">Thêm khách
+          hàng</button>
+        <table class="w-full border border-gray-300" id="customerTable">
+          <thead>
+            <tr>
+              <th class="border p-2">STT</th>
+              <th class="border p-2">Tên khách hàng</th>
+              <th class="border p-2">Email</th>
+              <th class="border p-2">Số điện thoại</th>
+              <th class="border p-2">Địa chỉ</th>
+              <th class="border p-2">Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="customerTableBody">
+            <!-- JS sẽ thêm dữ liệu tại đây -->
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- Form Thêm/Sửa Khách Hàng -->
+    <div id="customerForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-xl font-semibold mb-4">Thêm / Sửa Khách Hàng</h2>
+
+        <form id="formCustomer" class="space-y-4">
+          <input type="hidden" id="customerId">
+
+          <div>
+            <label for="customerName" class="block text-sm font-medium text-gray-700">Tên khách hàng</label>
+            <input type="text" id="customerName"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required>
+          </div>
+
+          <div>
+            <label for="customerEmail" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="text" id="customerEmail"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required>
+          </div>
+
+          <div>
+            <label for="customerPhone" class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+            <input type="text" id="customerPhone"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required>
+
+          </div>
+          <div>
+            <label for="customerAddress" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+            <input type="text" id="customerAddress"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              required>
+          </div>
+        </form>
+
+        <div class="mt-6 flex justify-end gap-2">
+          <button onclick="closeForm('customerForm')"
+            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Hủy</button>
+          <button onclick="saveCustomer(event)" type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
+        </div>
+        <button onclick="closeForm('customerForm')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+          ✕
+        </button>
+      </div>
+  </div>
   </div>
 
 <!-- Footer -->

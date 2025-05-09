@@ -32,6 +32,9 @@ function showTab(tabId) {
 function showForm(form) {
     if (form === 'employeeForm'){document.getElementById('employeeForm').classList.remove('hidden');}
     else if (form === 'productForm'){document.getElementById('productForm').classList.remove('hidden');}
+    else if (form === 'supplierForm'){document.getElementById('supplierForm').classList.remove('hidden');}
+    else if (form === 'customerForm'){document.getElementById('customerForm').classList.remove('hidden');}
+    
  
 }
 
@@ -44,5 +47,14 @@ function closeForm(form) {
         document.getElementById('productForm').classList.add('hidden');
         document.getElementById('formProduct').reset();
         document.getElementById('productId').value = '';
+    }
+    else if (form === 'supplierForm') {
+        document.getElementById('supplierForm').classList.add('hidden');
+        document.getElementById('formSupplier').reset();
+        document.getElementById('supplierId').value = '';
+    } else if (form === 'customerForm') {
+        document.getElementById('customerForm').classList.add('hidden');
+        document.getElementById('formCustomer').reset();
+        document.getElementById('customerId').value = '';
     }
  }

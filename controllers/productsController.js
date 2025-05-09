@@ -42,7 +42,7 @@ exports.addProduct = async (req, res) => {
         await req.pool.request()
             .input('name', sql.NVarChar, name)
             .input('description', sql.NVarChar, description)
-            .input('price', sql.Int, price)
+            .input('price', sql.Decimal(10,2), price)
             .input('quantity', sql.Int, quantity)
             .input('supplier_id', sql.Int, supplier_id)
             .query(query);
@@ -70,7 +70,7 @@ exports.updateProduct = async (req, res) => {
             .input('product_id', sql.Int, product_id)
             .input('name', sql.NVarChar, name)
             .input('description', sql.NVarChar, description)
-            .input('price', sql.Int, price)
+            .input('price', sql.Decimal(10,2), price)
             .input('quantity', sql.Int, quantity)
             .input('supplier_id', sql.Int, supplier_id)
             .query(query);
