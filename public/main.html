@@ -5,18 +5,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trang chủ</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!--<script src="https://cdn.tailwindcss.com"></script>--> 
+  <link href="./output.css" rel="stylesheet">
+  <script src="script1.js" defer></script>
   <script src="script.js" defer></script>
+  <script src="script2.js" defer></script>
+  <script src="script3.js" defer></script>
+  <script src="script4.js" defer></script>
 
 </head>
 
 <body class="h-screen flex flex-col">
   <!-- Top Navigator -->
-  <div class="w-full bg-yellow-400 flex justify-end space-x-2 p-2">
-    <button class="px-4 py-1 rounded bg-yellow-500">Góp ý</button>
-    <button class="px-4 py-1 rounded bg-yellow-500">Hỗ trợ</button>
-    <button class="px-4 py-1 rounded bg-yellow-500">Tài khoản</button>
+<div class="w-full bg-yellow-400 flex justify-end space-x-2 p-2 relative" id="topbar">
+  <button class="px-4 py-1 rounded bg-yellow-500">Góp ý</button>
+  <button class="px-4 py-1 rounded bg-yellow-500">Hỗ trợ</button>
+  <div class="relative">
+    <button onclick="toggleDropdown()" class="px-4 py-1 rounded bg-yellow-500 flex items-center space-x-1">
+      <span id="usernameDisplay">Tài khoản</span>
+      <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" stroke-width="2"
+           viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
+    <div id="accountDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg hidden z-10">
+      <div class="px-4 py-2 border-b">Thông tin tài khoản</div>
+      <button onclick="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100">Đăng xuất</button>
+    </div>
   </div>
+</div>
 
   <div class="flex flex-1">
     <!-- Left Navigator -->
@@ -107,7 +124,7 @@
         <h2 class="text-2xl font-bold mb-4">Danh Sách Nhân Viên</h2>
         <input type="text" class="w-full mb-4 px-4 py-2 border rounded-md"
           placeholder="Tìm kiếm nhân viên theo tên..." />
-        <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm()">Thêm nhân
+        <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm('employeeForm')">Thêm nhân
           viên</button>
         <table class="w-full border border-gray-300" id="employeeTable">
           <thead>
@@ -144,14 +161,14 @@
             </div>
 
             <div>
-              <label for="name" class="block text-sm font-medium text-gray-700">Email</label>
+              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
               <input type="text" id="email"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required>
             </div>
 
             <div>
-              <label for="address" class="block text-sm font-medium text-gray-700">Điện thoại</label>
+              <label for="phone" class="block text-sm font-medium text-gray-700">Điện thoại</label>
               <input type="text" id="phone"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 required>
@@ -180,13 +197,13 @@
           </form>
 
           <div class="mt-6 flex justify-end gap-2">
-            <button onclick="closeForm()"
+            <button onclick="closeForm('employeeForm')"
               class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Hủy</button>
             <button onclick="saveEmployee(event)" type="submit"
               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
           </div>
 
-          <button onclick="closeForm()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+          <button onclick="closeForm('employeeForm')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
             ✕
           </button>
         </div>
@@ -196,8 +213,82 @@
       <!-- Sản phẩm -->
       <div id="products" class="tab-pane hidden">
         <h2 class="text-2xl font-bold mb-4">Quản lý sản phẩm</h2>
-        <p>Hiển thị bảng sản phẩm ở đây</p>
+        <input type="text" class="w-full mb-4 px-4 py-2 border rounded-md"
+          placeholder="Tìm kiếm sản phẩm" />
+        <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm('productForm')">Thêm sản
+          phẩm</button>
+        <table class="w-full border border-gray-300" id="productTable">
+          <thead>
+            <tr>
+              <th class="border p-2">STT</th>
+              <th class="border p-2">Tên sản phẩm</th>
+              <th class="border p-2">Mô tả</th>
+              <th class="border p-2">Giá</th>
+              <th class="border p-2">Số lượng</th>
+              <th class="border p-2">Nhà cung cấp</th>  
+              <th class="border p-2">Hành động</th>
+            </tr>
+          </thead>  
+          <tbody id="productTableBody">
+            <!-- JS sẽ thêm dữ liệu tại đây -->
+          </tbody>    
+        </table>
+        
       </div>
+
+      <!-- Form Thêm/Sửa Sản Phẩm -->
+      <div id="productForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <h2 class="text-xl font-semibold mb-4">Thêm / Sửa Sản Phẩm</h2>
+
+          <form id="formProduct" class="space-y-4">
+            <input type="hidden" id="productId">
+
+            <div>
+              <label for="productName" class="block text-sm font-medium text-gray-700">Tên sản phẩm</label>
+              <input type="text" id="productName"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required> 
+            </div>  
+            <div>
+              <label for="productDescription" class="block text-sm font-medium text-gray-700">Mô tả</label>
+              <textarea id="productDescription"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required></textarea>
+            </div>  
+            <div>
+              <label for="productPrice" class="block text-sm font-medium text-gray-700">Giá</label>
+              <input type="number" id="productPrice"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+            <div>
+              <label for="productQuantity" class="block text-sm font-medium text-gray-700">Số lượng</label>
+              <input type="number" id="productQuantity"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required> 
+            </div>
+            <div>
+              <label for="productSupplier_id" class="block text-sm font-medium text-gray-700">Nhà cung cấp</label>
+              <input type="text" id="productSupplier_id"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required>
+            </div>
+          </form> 
+
+          <div class="mt-6 flex justify-end gap-2">
+            <button onclick="closeForm('productForm')"
+              class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Hủy</button>
+            <button onclick="saveProduct(event)" type="submit"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
+        </div>
+
+          <button onclick="closeForm('productForm')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+            ✕
+          </button>
+        </div>
+      </div>
+
 
       <!-- Đơn hàng -->
       <div id="orders" class="tab-pane hidden">

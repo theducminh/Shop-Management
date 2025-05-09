@@ -3,6 +3,7 @@ const express = require('express');
 const sql = require('mssql');
 const cors = require('cors');
 const employeesRoutes = require('./routes/employees');
+const productsRoutes = require('./routes/products');
 
 
 const app = express();
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 
 //Call Routes
 app.use('/employees', employeesRoutes);
+app.use('/products', productsRoutes);
 
 //Starting server
 

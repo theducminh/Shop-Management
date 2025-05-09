@@ -1,162 +1,48 @@
-const API_URL = 'http://localhost:3000/Employees';
+// Hiển thị tên đăng nhập
+const username = localStorage.getItem("username");
+if (username) {
+  document.getElementById("usernameDisplay").innerText = username;
+}
+
+// Toggle dropdown
+function toggleDropdown() {
+  document.getElementById("accountDropdown").classList.toggle("hidden");
+}
+
+// Đăng xuất
+function logout() {
+  localStorage.removeItem("username");
+  window.location.href = "login.html";
+}
+
+// Ẩn dropdown khi click ngoài
+window.addEventListener("click", function(e) {
+  const dropdown = document.getElementById("accountDropdown");
+  const button = document.querySelector("#topbar button[onclick='toggleDropdown()']");
+  if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+    dropdown.classList.add("hidden");
+  }
+});
 
 function showTab(tabId) {
-  document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.add('hidden'));
-  document.getElementById(tabId).classList.remove('hidden');
+ document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.add('hidden'));
+ document.getElementById(tabId).classList.remove('hidden');
 }
 
-function showForm() {
-  document.getElementById('employeeForm').classList.remove('hidden');
+function showForm(form) {
+    if (form === 'employeeForm'){document.getElementById('employeeForm').classList.remove('hidden');}
+    else if (form === 'productForm'){document.getElementById('productForm').classList.remove('hidden');}
+ 
 }
 
-function closeForm() {
-  document.getElementById('employeeForm').classList.add('hidden');
-  document.getElementById('formEmployee').reset();
-  document.getElementById('employeeId').value = '';
-}
-
-// Lấy toàn bộ danh sách nhân viên
-async function fetchEmployees() {
-  try {
-    const res = await fetch(API_URL);
-    const employees = await res.json();
-    renderEmployeeTable(employees);
-  } catch (err) {
-    console.error('Lỗi khi lấy danh sách nhân viên:', err);
-  }
-} 
-
-// Hiển thị bảng nhân viên
-function renderEmployeeTable(employees) {
-  const tbody = document.getElementById('employeeTableBody');
-  tbody.innerHTML = '';
-  employees.forEach((emp, idx) => {
-    const row = `
-      <tr>
-        <td class="border p-2">${idx + 1}</td>
-        <td class="border p-2">${emp.name}</td>
-        <td class="border p-2">${emp.email}</td>
-        <td class="border p-2">${emp.phone}</td>
-        <td class="border p-2">${emp.position}</td>
-        <td class="border p-2">${emp.password}</td>
-        <td class="border p-2">${emp.hire_date}</td>
-        <td class="border p-2">
-          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editEmployee(${emp.employee_id})">Sửa</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteEmployee(${emp.employee_id})">Xóa</button>
-        </td>
-      </tr>
-    `;
-    tbody.innerHTML += row;
-  });
-}
-
-// Thêm hoặc cập nhật nhân viên
-async function saveEmployee(event) {
-  event.preventDefault();
-
-  const employee_id = document.getElementById('employeeId').value;
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const phone = document.getElementById('phone').value;
-  const position = document.getElementById('position').value;
-  const password = document.getElementById('password').value;
-  const hire_date = document.getElementById('hire_date').value;
-
-  if (!name || !email || !phone || !position || !password || !hire_date) {
-    alert('Vui lòng điền đầy đủ thông tin!');
-    return;
-  }
-
-  const data = { name, email, phone, position, password, hire_date };
-
-  try {
-    let res;
-    if (employee_id) {
-      res = await fetch(`${API_URL}/${employee_id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-    } else {
-      res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+function closeForm(form) {
+    if (form === 'employeeForm') {
+        document.getElementById('employeeForm').classList.add('hidden');
+        document.getElementById('formEmployee').reset();
+        document.getElementById('employeeId').value = '';
+    } else if (form === 'productForm') {
+        document.getElementById('productForm').classList.add('hidden');
+        document.getElementById('formProduct').reset();
+        document.getElementById('productId').value = '';
     }
-
-    const result = await res.json();
-
-    if (!res.ok) {
-      alert(result.message || 'Có lỗi xảy ra khi lưu nhân viên!');
-    } else {
-      alert(result.message);
-      closeForm();
-      fetchEmployees();
-    }
-  } catch (err) {
-    console.error('Lỗi khi lưu nhân viên:', err);
-  }
-}
-
-// Xoá nhân viên
-async function deleteEmployee(employee_id) {
-  if (confirm('Bạn có chắc chắn muốn xóa nhân viên này?')) {
-    try {
-        await fetch(`${API_URL}/${employee_id}`, { method: 'DELETE' });
-        alert('Xóa nhân viên thành công!');
-        fetchEmployees(); // Cập nhật lại danh sách sau khi xóa
-    } catch (error) {
-        console.error('Lỗi khi xóa nhân viên:', error);
-    }
-}
-}
-
-// Chỉnh sửa nhân viên
-async function editEmployee(employee_id) {
-  try {
-    const res = await fetch(`${API_URL}/${employee_id}`);
-    const emp = await res.json();
-
-    if (!res.ok) {
-      alert(emp.message || 'Không thể lấy thông tin nhân viên!');
-      return;
-    }
-
-    document.getElementById('employeeId').value = emp.employee_id;
-    document.getElementById('name').value = emp.name;
-    document.getElementById('email').value = emp.email;
-    document.getElementById('phone').value = emp.phone;
-    document.getElementById('position').value = emp.position;
-    document.getElementById('password').value = emp.password;
-    document.getElementById('hire_date').value = emp.hire_date;
-
-    showForm();
-  } catch (err) {
-    console.error('Lỗi khi lấy thông tin nhân viên:', err);
-    alert("Đã có lỗi xảy ra khi chỉnh sửa nhân viên.");
-  }
-}
-
-// Tìm kiếm theo tên
-function searchEmployees() {
-  const keyword = document.getElementById('searchInput').value.toLowerCase();
-  const rows = document.querySelectorAll('#employeeTableBody tr');
-  rows.forEach(row => {
-    const name = row.children[1]?.textContent.toLowerCase();
-    row.style.display = name.includes(keyword) ? '' : 'none';
-  });
-}
-
-// Gắn sự kiện
-document.addEventListener('DOMContentLoaded', () => {
-  fetchEmployees();
-
-  const searchInput = document.querySelector('input[placeholder*="Tìm kiếm"]');
-  if (searchInput) {
-    searchInput.id = 'searchInput';
-    searchInput.addEventListener('input', searchEmployees);
-  }
-
-  document.getElementById('formEmployee')?.addEventListener('submit', saveEmployee);
-});
+ }
