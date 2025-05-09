@@ -125,22 +125,27 @@ async function editEmployee(employee_id) {
 }
 
 // Tìm kiếm theo tên
-function searchEmployees() {
-  const keyword = document.getElementById('searchInput').value.toLowerCase();
-  const rows = document.querySelectorAll('#employeeTableBody tr');
-  rows.forEach(row => {
-    const name = row.children[1]?.textContent.toLowerCase();
-    row.style.display = name.includes(keyword) ? '' : 'none';
-  });
+async function searchEmployees() {
+  const searchValue = document.getElementById('employeeSearch').value.toLowerCase();
+  try {
+    const res = await fetch(API_URL);
+    const employees = await res.json();
+    const filteredEmployees = employees.filter((emp) =>
+      emp.name.toLowerCase().includes(searchValue)
+    );
+    renderEmployeeTable(filteredEmployees);
+  } catch (err) {
+    console.error('Lỗi khi tìm kiếm nhân viên:', err);
+  }
 }
 
 // Gắn sự kiện
 document.addEventListener('DOMContentLoaded', () => {
   fetchEmployees();
 
-  const searchInput = document.querySelector('input[placeholder*="Tìm kiếm"]');
+  const searchInput = document.querySelector('input[placeholder*="Tìm kiếm nhân viên"]');
   if (searchInput) {
-    searchInput.id = 'searchInput1';
+    searchInput.id = 'employeeSearch';
     searchInput.addEventListener('input', searchEmployees);
   }
 
