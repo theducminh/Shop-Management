@@ -1,5 +1,7 @@
 const API_URL1 = 'http://localhost:3000/Products';
 
+let oldProductId = null;
+
 // Lấy toàn bộ danh sách sản phẩm
 async function fetchProducts() {
   try {
@@ -19,14 +21,15 @@ function renderProductTable(products) {
     const row = `
       <tr>
         <td class="border p-2">${idx + 1}</td>
+        <td class="border p-2">${prod.product_id}</td>
         <td class="border p-2">${prod.name}</td>
         <td class="border p-2">${prod.description}</td>
         <td class="border p-2">${prod.price}</td>
         <td class="border p-2">${prod.quantity}</td>
         <td class="border p-2">${prod.supplier_id}</td>
         <td class="border p-2">
-          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editProduct(${prod.product_id})">Sửa</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteProduct(${prod.product_id})">Xóa</button>
+          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editProduct('${prod.product_id}')">Sửa</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteProduct('${prod.product_id}')">Xóa</button>
         </td>
       </tr>
     `;
@@ -39,24 +42,24 @@ function renderProductTable(products) {
 async function saveProduct(event) {
   event.preventDefault();
 
-  const product_id = document.getElementById('productId').value;
+  const product_id = document.getElementById('product_id').value;
   const name = document.getElementById('productName').value;
   const description = document.getElementById('productDescription').value;
   const price = document.getElementById('productPrice').value;
   const quantity = document.getElementById('productQuantity').value;
   const supplier_id = document.getElementById('productSupplier_id').value;
 
-  if (!name || !description || !price || !quantity || !supplier_id) {
+  if (!name || !description || !price || !quantity || !supplier_id || !product_id) {
     alert('Vui lòng điền đầy đủ thông tin!');
     return;
   }
 
-  const data = { name, description, price, quantity, supplier_id };
+  const data = { product_id, name, description, price, quantity, supplier_id };
 
   try {
     let res;
-    if (product_id) {
-      res = await fetch(`${API_URL1}/${product_id}`, {
+    if (oldProductId) {
+      res = await fetch(`${API_URL1}/${oldProductId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -75,6 +78,7 @@ async function saveProduct(event) {
       alert(result.message);
       closeForm('productForm');
       fetchProducts();
+      oldProductId = null; // Reset oldProductId after saving
     } else {
       alert('Lỗi khi lưu sản phẩm!' || result.message);
     }
@@ -108,12 +112,13 @@ async function editProduct(product_id) {
     const res = await fetch(`${API_URL1}/${product_id}`);
     const product = await res.json();
     if (res.ok) {
-      document.getElementById('productId').value = product.product_id;
+      document.getElementById('product_id').value = product.product_id;
       document.getElementById('productName').value = product.name;
       document.getElementById('productDescription').value = product.description;
       document.getElementById('productPrice').value = product.price;
       document.getElementById('productQuantity').value = product.quantity;
       document.getElementById('productSupplier_id').value = product.supplier_id;
+      oldProductId = product.product_id; // Set oldProductId for update
       showForm('productForm');
     } else {
       alert('Lỗi khi lấy thông tin sản phẩm!');

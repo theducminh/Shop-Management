@@ -3,7 +3,7 @@ const sql = require('mssql');
 // Lấy toàn bộ danh sách nhân viên
 exports.getAllEmployees = async (req, res) => {
   try {
-    const result = await req.pool.request().query('SELECT * FROM Employees');
+    const result = await req.pool.request().query('SELECT * FROM  Employees Order by employee_id');
     res.json(result.recordset);
   } catch (err) {
     console.error('Lỗi khi lấy danh sách nhân viên:', err);
@@ -13,11 +13,11 @@ exports.getAllEmployees = async (req, res) => {
 
 // Lấy chi tiết nhân viên theo ID
 exports.getEmployeeById = async (req, res) => {
-  const employeeId = parseInt(req.params.employee_id);
+  const employeeId = req.params.employee_id;
 
   try {
       const result = await req.pool.request()
-        .input('id', sql.Int, employeeId)
+        .input('id', sql.VarChar, employeeId)
         .query('SELECT * FROM Employees WHERE employee_id = @id');
 
     if (result.recordset.length > 0) {
@@ -34,20 +34,22 @@ exports.getEmployeeById = async (req, res) => {
 
 // Thêm nhân viên mới
 exports.addEmployee = async (req, res) => {
-  const { name, email, phone, position, password, hire_date } = req.body;
+  const { employee_id, name, sex, email, phone, position, password, hire_date } = req.body;
 
   // Kiểm tra dữ liệu đầu vào
-  if (!name || !email || !phone || !position || !password || !hire_date) {
+  if (!employee_id || !name || !sex || !email || !phone || !position || !password || !hire_date) {
     return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
   }
 
   try {
-    const query = 
-      `INSERT INTO Employees (name, email, phone, position, password, hire_date)
-      VALUES (@name, @email, @phone, @position, @password, @hire_date)`;
+    const query =
+      `INSERT INTO Employees ( employee_id, name, sex, email, phone, position, password, hire_date)
+      VALUES ( @employee_id, @name, @sex, @email, @phone, @position, @password, @hire_date)`;
 
     await req.pool.request()
+      .input('employee_id', sql.VarChar, employee_id)
       .input('name', sql.NVarChar, name)
+      .input('sex', sql.NVarChar, sex)
       .input('email', sql.NVarChar, email)
       .input('phone', sql.NVarChar, phone)
       .input('position', sql.NVarChar, position)
@@ -64,19 +66,21 @@ exports.addEmployee = async (req, res) => {
 
 // Cập nhật thông tin nhân viên
 exports.updateEmployee = async (req, res) => {
-  const { employee_id } = req.params;
-  const { name, email, phone, position, password, hire_date } = req.body;
+  const oldEmployeeId = req.params.employee_id;
+  const { employee_id, name, sex, email, phone, position, password, hire_date } = req.body;
 
   try {
     const query = 
       `UPDATE Employees
-      SET name = @name, email = @email, phone = @phone, position = @position,
+      SET employee_id = @newEmployeeId, name = @name, sex = @sex, email = @email, phone = @phone, position = @position,
           password = @password, hire_date = @hire_date
-      WHERE employee_id = @employee_id`;
+      WHERE employee_id = @oldEmployeeId`;
 
     await req.pool.request()
-      .input('employee_id', sql.Int, employee_id)
+      .input('newEmployeeId', sql.VarChar, employee_id)
+      .input('oldEmployeeId', sql.VarChar, oldEmployeeId)
       .input('name', sql.NVarChar, name)
+      .input('sex', sql.NVarChar, sex)
       .input('email', sql.NVarChar, email)
       .input('phone', sql.NVarChar, phone)
       .input('position', sql.NVarChar, position)
@@ -97,7 +101,7 @@ exports.deleteEmployee = async (req, res) => {
 
   try {
     await req.pool.request()
-      .input('employee_id', sql.Int, employee_id)
+      .input('employee_id', sql.VarChar, employee_id)
       .query('DELETE FROM Employees WHERE employee_id = @employee_id');
 
     res.json({ message: 'Nhân viên đã được xoá!' });

@@ -30,31 +30,37 @@ function showTab(tabId) {
 }
 
 function showForm(form) {
-    if (form === 'employeeForm'){document.getElementById('employeeForm').classList.remove('hidden');}
+    if (form === 'employeeForm'){document.getElementById('employeeForm').classList.remove('hidden');
+    }
     else if (form === 'productForm'){document.getElementById('productForm').classList.remove('hidden');}
     else if (form === 'supplierForm'){document.getElementById('supplierForm').classList.remove('hidden');}
     else if (form === 'customerForm'){document.getElementById('customerForm').classList.remove('hidden');}
-    
- 
+    else if (form === 'orderForm'){document.getElementById('orderForm').classList.remove('hidden');}
+
 }
 
 function closeForm(form) {
     if (form === 'employeeForm') {
         document.getElementById('employeeForm').classList.add('hidden');
         document.getElementById('formEmployee').reset();
-        document.getElementById('employeeId').value = '';
+        document.getElementById('employee_id').value = '';
     } else if (form === 'productForm') {
         document.getElementById('productForm').classList.add('hidden');
         document.getElementById('formProduct').reset();
-        document.getElementById('productId').value = '';
+        document.getElementById('product_id').value = '';
     }
     else if (form === 'supplierForm') {
         document.getElementById('supplierForm').classList.add('hidden');
         document.getElementById('formSupplier').reset();
-        document.getElementById('supplierId').value = '';
+        document.getElementById('supplier_id').value = '';
     } else if (form === 'customerForm') {
         document.getElementById('customerForm').classList.add('hidden');
         document.getElementById('formCustomer').reset();
-        document.getElementById('customerId').value = '';
+        document.getElementById('customer_id').value = '';
+    }
+    else if (form === 'orderForm') {
+        document.getElementById('orderForm').classList.add('hidden');
+        document.getElementById('formOrder').reset();
+        document.getElementById('order_id').value = '';
     }
  }

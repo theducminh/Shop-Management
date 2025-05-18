@@ -1,5 +1,6 @@
 const API_URL3 = 'http://localhost:3000/Customers';
 
+let oldCustomerId = null;
 // Lấy toàn bộ danh sách khách hàng
 async function fetchCustomers() {
   try {
@@ -20,13 +21,14 @@ function renderCustomerTable(customers) {
    const row = `
       <tr>
         <td class="border p-2">${index + 1}</td>
+        <td class="border p-2">${customer.customer_id}</td>
         <td class="border p-2">${customer.name}</td>
         <td class="border p-2">${customer.email}</td>
         <td class="border p-2">${customer.phone}</td> 
         <td class="border p-2">${customer.address}</td>
         <td class="border p-2">
-          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editCustomer(${customer.customer_id})">Sửa</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteCustomer(${customer.customer_id})">Xóa</button>
+          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editCustomer('${customer.customer_id}')">Sửa</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteCustomer('${customer.customer_id}')">Xóa</button>
         </td>
       </tr>
     `;
@@ -39,23 +41,23 @@ function renderCustomerTable(customers) {
 async function saveCustomer(event) {
   event.preventDefault();
 
-  const customerId = document.getElementById('customerId').value;
+  const customer_id = document.getElementById('customer_id').value;
   const name = document.getElementById('customerName').value;
   const email = document.getElementById('customerEmail').value;
   const phone = document.getElementById('customerPhone').value;
   const address = document.getElementById('customerAddress').value;
 
-  if (!name || !email || !phone || !address) {
+  if (!name || !email || !phone || !address || !customer_id) {
     alert('Vui lòng điền đầy đủ thông tin!');
     return;
   }
 
-  const data = { name, email, phone, address };
+  const data = { customer_id, name, email, phone, address };
 
   try {
     let res;
-    if (customerId) {
-      res = await fetch(`${API_URL3}/${customerId}`, {
+    if (oldCustomerId) {
+      res = await fetch(`${API_URL3}/${oldCustomerId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -72,7 +74,9 @@ async function saveCustomer(event) {
       alert('Khách hàng đã được lưu thành công!');
       closeForm('customerForm');
       fetchCustomers();
-      
+
+      oldCustomerId = null; // Reset oldCustomerId after saving
+
     } else {
       alert('Đã xảy ra lỗi khi lưu khách hàng.');
     }
@@ -82,10 +86,10 @@ async function saveCustomer(event) {
 }
 
 // Xóa khách hàng
-async function deleteCustomer(customerId) {
+async function deleteCustomer(customer_id) {
   if (confirm('Bạn có chắc chắn muốn xóa khách hàng này không?')) {
     try {
-      const res = await fetch(`${API_URL3}/${customerId}`, {
+      const res = await fetch(`${API_URL3}/${customer_id}`, {
         method: 'DELETE',
       });
       if (res.ok) {
@@ -105,19 +109,24 @@ async function editCustomer(customer_id){
     try{
         const res = await fetch(`${API_URL3}/${customer_id}`);
         const customer = await res.json();
+        
+
         if (res.ok) {
-            document.getElementById('customerId').value = customer.customer_id;
+            document.getElementById('customer_id').value = customer.customer_id;
             document.getElementById('customerName').value = customer.name;
             document.getElementById('customerEmail').value = customer.email;
             document.getElementById('customerPhone').value = customer.phone;
             document.getElementById('customerAddress').value = customer.address;
+            oldCustomerId = customer.customer_id; // Lưu ID cũ để cập nhật
             showForm('customerForm');
         }
         else{
             alert('Đã xảy ra lỗi khi lấy thông tin khách hàng.');
+            return;
         }
     } catch(err){
         console.error('Lỗi khi lấy thông tin khách hàng:', err);
+        alert('Đã xảy ra lỗi khi lấy chỉnh sửa khách hàng.');
     }
 }
 

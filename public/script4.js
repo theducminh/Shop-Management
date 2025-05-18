@@ -1,5 +1,7 @@
 const API_URL4 = 'http://localhost:3000/Suppliers';
 
+let oldSupplierId = null;
+
 // lấy toàn bộ danh sách nhà cung cấp
 async function fetchSuppliers() {
   try {
@@ -20,15 +22,16 @@ function renderSupplierTable(suppliers) {
     const row = `
       <tr> 
         <td class="border p-2">${index + 1}</td>
+        <td class="border p-2">${supplier.supplier_id}</td>
         <td class="border p-2">${supplier.name}</td> 
-        <td class="border p-2">${supplier.email}</td>
         <td class="border p-2">${supplier.phone}</td>
+        <td class="border p-2">${supplier.email}</td>
         <td class="border p-2">${supplier.address}</td>
         <td class="border p-2">
-          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editSupplier(${supplier.supplier_id})">Sửa</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteSupplier(${supplier.supplier_id})">Xóa</button>
-          </td>
-          </tr>`;
+          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editSupplier('${supplier.supplier_id}')">Sửa</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteSupplier('${supplier.supplier_id}')">Xóa</button>
+        </td>
+      </tr>`;
     tableBody.innerHTML += row;
   });
 }
@@ -37,23 +40,23 @@ function renderSupplierTable(suppliers) {
 async function saveSupplier(event) {
   event.preventDefault();
 
-  const supplierId = document.getElementById('supplierId').value;
+  const supplier_id = document.getElementById('supplier_id').value;
   const name = document.getElementById('supplierName').value;
-  const email = document.getElementById('supplierEmail').value;
   const phone = document.getElementById('supplierPhone').value;
+  const email = document.getElementById('supplierEmail').value;
   const address = document.getElementById('supplierAddress').value;
 
-  if (!name || !email || !phone || !address) {
+  if (!name || !email || !phone || !address || !supplier_id) {
     alert('Vui lòng điền đầy đủ thông tin!');
     return;
   }
 
-  const data = { name, email, phone, address };
+  const data = { supplier_id, name, phone, email, address };
 
   try {
     let res;
-    if (supplierId) {
-      res = await fetch(`${API_URL4}/${supplierId}`, {
+    if (oldSupplierId) {
+      res = await fetch(`${API_URL4}/${oldSupplierId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -69,6 +72,7 @@ async function saveSupplier(event) {
       alert('Nhà cung cấp đã được lưu thành công!');
       fetchSuppliers();
       closeForm('supplierForm');
+      oldSupplierId = null; // reset oldSupplierId
     } else {
       alert('Lỗi khi lưu nhà cung cấp!');
     }
@@ -102,17 +106,18 @@ async function editSupplier(supplier_id) {
     const res = await fetch(`${API_URL4}/${supplier_id}`);
     const supplier = await res.json();
     if (res.ok) {
-      document.getElementById('supplierId').value = supplier.supplier_id;
+      document.getElementById('supplier_id').value = supplier.supplier_id;
       document.getElementById('supplierName').value = supplier.name;
-      document.getElementById('supplierEmail').value = supplier.email;
       document.getElementById('supplierPhone').value = supplier.phone;
+      document.getElementById('supplierEmail').value = supplier.email;
       document.getElementById('supplierAddress').value = supplier.address;
+      oldSupplierId = supplier.supplier_id; // lưu lại ID cũ để cập nhật
       showForm('supplierForm');
     } else {
-      alert('Lỗi khi lấy thông tin nhà cung cấp!');
+      alert('Không thể lấy thông tin nhà cung cấp!');
     }
   } catch (err) {
-    console.error('Lỗi khi lấy thông tin nhà cung cấp:', err);
+    console.error('Lỗi khi chỉnh sửa thông tin nhà cung cấp:', err);
   }
 }
 

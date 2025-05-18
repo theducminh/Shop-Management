@@ -1,6 +1,7 @@
 const API_URL = 'http://localhost:3000/Employees';
 
- 
+ let oldEmployeeId = null;
+
 // Lấy toàn bộ danh sách nhân viên
 async function fetchEmployees() {
   try {
@@ -20,15 +21,17 @@ function renderEmployeeTable(employees) {
     const row = `
       <tr>
         <td class="border p-2">${idx + 1}</td>
+        <td class="border p-2">${emp.employee_id}</td>
         <td class="border p-2">${emp.name}</td>
+        <td class="border p-2">${emp.sex}</td>
         <td class="border p-2">${emp.email}</td>
         <td class="border p-2">${emp.phone}</td>
         <td class="border p-2">${emp.position}</td>
         <td class="border p-2">${emp.password}</td>
         <td class="border p-2">${emp.hire_date}</td>
         <td class="border p-2">
-          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editEmployee(${emp.employee_id})">Sửa</button>
-          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteEmployee(${emp.employee_id})">Xóa</button>
+          <button class="bg-yellow-400 px-2 py-1 rounded mr-2" onclick="editEmployee('${emp.employee_id}')">Sửa</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="deleteEmployee('${emp.employee_id}')">Xóa</button>
         </td>
       </tr>
     `;
@@ -40,25 +43,26 @@ function renderEmployeeTable(employees) {
 async function saveEmployee(event) {
   event.preventDefault();
 
-  const employee_id = document.getElementById('employeeId').value;
+  const employee_id = document.getElementById('employee_id').value;
   const name = document.getElementById('name').value;
+  const sex = document.getElementById('sex').value;
   const email = document.getElementById('email').value;
   const phone = document.getElementById('phone').value;
   const position = document.getElementById('position').value;
   const password = document.getElementById('password').value;
   const hire_date = document.getElementById('hire_date').value;
 
-  if (!name || !email || !phone || !position || !password || !hire_date) {
+  if (!name || !email || !phone || !position || !password || !hire_date || !employee_id || !sex) {
     alert('Vui lòng điền đầy đủ thông tin!');
     return;
   }
 
-  const data = { name, email, phone, position, password, hire_date };
+  const data = { employee_id, name, sex, email, phone, position, password, hire_date };
 
   try {
     let res;
-    if (employee_id) {
-      res = await fetch(`${API_URL}/${employee_id}`, {
+    if (oldEmployeeId) {
+      res = await fetch(`${API_URL}/${oldEmployeeId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -79,6 +83,7 @@ async function saveEmployee(event) {
       alert(result.message);
       closeForm('employeeForm');
       fetchEmployees();
+      oldEmployeeId = null; // Reset ID cũ sau khi lưu
     }
   } catch (err) {
     console.error('Lỗi khi lưu nhân viên:', err);
@@ -108,16 +113,17 @@ async function editEmployee(employee_id) {
       alert(emp.message || 'Không thể lấy thông tin nhân viên!');
       return;
     }
-
-    document.getElementById('employeeId').value = emp.employee_id;
+    document.getElementById('employee_id').value = emp.employee_id;
     document.getElementById('name').value = emp.name;
+    document.getElementById('sex').value = emp.sex;
     document.getElementById('email').value = emp.email;
     document.getElementById('phone').value = emp.phone;
     document.getElementById('position').value = emp.position;
     document.getElementById('password').value = emp.password;
     document.getElementById('hire_date').value = emp.hire_date;
-
+    oldEmployeeId = emp.employee_id; // Lưu lại ID cũ để cập nhật
     showForm('employeeForm');
+    
   } catch (err) {
     console.error('Lỗi khi lấy thông tin nhân viên:', err);
     alert("Đã có lỗi xảy ra khi chỉnh sửa nhân viên.");

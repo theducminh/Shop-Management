@@ -3,7 +3,7 @@ const sql = require('mssql');
 // Lấy toàn bộ danh sách nhà cung cấp
 exports.getAllSuppliers = async (req, res) => {
   try {
-    const result = await req.pool.request().query('SELECT * FROM Suppliers');
+    const result = await req.pool.request().query('SELECT * FROM Suppliers ORDER BY supplier_id');
     res.json(result.recordset);
   } catch (err) {
     console.error('Lỗi khi lấy danh sách nhà cung cấp:', err);
@@ -13,10 +13,10 @@ exports.getAllSuppliers = async (req, res) => {
 
 // Lấy chi tiết nhà cung cấp theo ID
 exports.getSupplierById = async (req, res) => {
-    const supplierId = parseInt(req.params.supplier_id);
+    const supplierId = req.params.supplier_id;
     try {
         const result = await req.pool.request()
-            .input('id', sql.Int, supplierId)
+            .input('id', sql.VarChar, supplierId)
             .query('SELECT * FROM Suppliers WHERE supplier_id = @id');
         if (result.recordset.length > 0) {
             res.json(result.recordset[0]);
@@ -31,15 +31,16 @@ exports.getSupplierById = async (req, res) => {
 
 // Thêm nhà cung cấp mới
 exports.addSupplier = async (req, res) => {
-    const { name, email, phone, address } = req.body;
+    const { supplier_id, name, email, phone, address } = req.body;
     // Kiểm tra dữ liệu đầu vào
-    if (!name || !email || !phone || !address) {
+    if (!name || !email || !phone || !address || !supplier_id) {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
     }
     try {
-        const query = `INSERT INTO Suppliers (name, phone, email, address)
-        VALUES (@name, @phone, @email, @address)`;
+        const query = `INSERT INTO Suppliers (supplier_id, name, phone, email, address)
+        VALUES (@supplier_id, @name, @phone, @email, @address)`;
         await req.pool.request()
+            .input('supplier_id', sql.VarChar, supplier_id)
             .input('name', sql.NVarChar, name)
             .input('phone', sql.NVarChar, phone)
             .input('email', sql.NVarChar, email)
@@ -54,18 +55,19 @@ exports.addSupplier = async (req, res) => {
 
 // Cập nhật thông tin nhà cung cấp
 exports.updateSupplier = async (req, res) => {
-    const { supplier_id } = req.params;
+    const oldSupplierId = req.params.supplier_id;
 
-    const { name, email, phone, address } = req.body;
+    const { supplier_id, name, email, phone, address } = req.body;
     // Kiểm tra dữ liệu đầu vào
-    if (!name || !email || !phone || !address) {
+    if (!name || !email || !phone || !address || !supplier_id) {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
     }
     try {
-        const query = `UPDATE Suppliers SET name = @name, phone = @phone, email = @email, address = @address
-        WHERE supplier_id = @supplier_id`;
+        const query = `UPDATE Suppliers SET supplier_id = @newSupplierId, name = @name, phone = @phone, email = @email, address = @address
+        WHERE supplier_id = @oldSupplierId`;
         await req.pool.request()
-            .input('supplier_id', sql.Int, supplier_id)
+            .input('newSupplierId', sql.VarChar, supplier_id)
+            .input('oldSupplierId', sql.VarChar, oldSupplierId)
             .input('name', sql.NVarChar, name)
             .input('phone', sql.NVarChar, phone)
             .input('email', sql.NVarChar, email)
@@ -84,7 +86,7 @@ exports.deleteSupplier = async (req, res) => {
     try {
         const query = `DELETE FROM Suppliers WHERE supplier_id = @supplier_id`;
         await req.pool.request()
-            .input('supplier_id', sql.Int, supplier_id)
+            .input('supplier_id', sql.VarChar, supplier_id)
             .query(query);
         res.status(200).json({ message: 'Nhà cung cấp đã được xóa thành công!' });
     } catch (err) {
