@@ -6,6 +6,8 @@ const employeesRoutes = require('./routes/employees');
 const productsRoutes = require('./routes/products');
 const suppliersRoutes = require('./routes/suppliers');
 const customersRoutes = require('./routes/customers');
+const ordersRoutes = require('./routes/orders');
+const orderdetailRoutes = require('./routes/orderdetails');
 
 
 const app = express();
@@ -59,7 +61,8 @@ app.use('/employees', employeesRoutes);
 app.use('/products', productsRoutes);
 app.use('/suppliers', suppliersRoutes);
 app.use('/customers', customersRoutes);
-
+app.use('/orders', ordersRoutes);
+app.use('/orderdetails', orderdetailRoutes);
 //Starting server
 
 app.listen(port, () => {

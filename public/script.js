@@ -36,6 +36,9 @@ function showForm(form) {
     else if (form === 'supplierForm'){document.getElementById('supplierForm').classList.remove('hidden');}
     else if (form === 'customerForm'){document.getElementById('customerForm').classList.remove('hidden');}
     else if (form === 'orderForm'){document.getElementById('orderForm').classList.remove('hidden');}
+    else if (form === 'orderDetailForm'){document.getElementById('orderDetailForm').classList.remove('hidden');}
+    else if (form === 'orderDetails'){document.getElementById('orderDetails').classList.remove('hidden');}
+    else if (form === 'orderdetailForm'){document.getElementById('orderdetailForm').classList.remove('hidden');}
 
 }
 
@@ -63,4 +66,14 @@ function closeForm(form) {
         document.getElementById('formOrder').reset();
         document.getElementById('order_id').value = '';
     }
+    else if (form === 'orderdetailForm') {
+        document.getElementById('orderdetailForm').classList.add('hidden');
+        document.getElementById('formOrderDetail').reset();
+        document.getElementById('orderid').value = '';
+    }
+    else if (form === 'orderDetails') {
+        document.getElementById('orderDetails').classList.add('hidden');
+        document.getElementById('order_id').value = '';
+    }
+ 
  }

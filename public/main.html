@@ -12,6 +12,8 @@
   <script src="script2.js" defer></script>
   <script src="script3.js" defer></script>
   <script src="script4.js" defer></script>
+  <script src="script5.js" defer></script>
+  <script src="script6.js" defer></script>
 
 </head>
 
@@ -542,8 +544,91 @@
         </div>
     </div>
 
-  </div>
+    <!--Chi tiết đơn hàng-->
+    <div id="orderDetails" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-40">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 relative">
+    
+    <h2 id="orderDetailsTitle" class="text-2xl font-bold mb-4">Chi tiết đơn hàng</h2>
+
+    <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="showForm('orderdetailForm')">
+      Thêm sản phẩm
+    </button>
+
+    <table class="w-full border border-gray-300" id="orderDetailsTable">
+      <thead>
+        <tr>
+          <th class="border p-2">STT</th>
+          <th class="border p-2">Mã đơn hàng</th>
+          <th class="border p-2">Mã sản phẩm</th>
+          <th class="border p-2">Số lượng</th>
+          <th class="border p-2">Giá</th>
+          <th class="border p-2">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="orderDetailTableBody">
+        <!-- JS sẽ thêm dữ liệu tại đây -->
+      </tbody>
+    </table>
+
+    <div class="mt-4 text-right">
+      <button onclick="closeForm('orderDetails')" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+        Đóng
+      </button>
     </div>
+
+    <button onclick="closeForm('orderDetails')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+      ✕
+    </button>
+    
+  </div>
+</div>
+
+<!-- Form Thêm/Sửa Chi Tiết Đơn Hàng (đè lên popup orderDetails) -->
+<div id="orderdetailForm" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <h2 class="text-xl font-semibold mb-4">Thêm / Sửa Chi Tiết Đơn Hàng</h2>
+
+    <form id="formOrderDetail" class="space-y-4">
+      <div>
+        <label for="orderid" class="block text-sm font-medium text-gray-700">Mã đơn hàng</label>
+        <input type="text" id="orderid"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          required>
+      </div>
+      <div>
+        <label for="productid" class="block text-sm font-medium text-gray-700">Mã sản phẩm</label>
+        <input type="text" id="productid"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          required>
+      </div>
+      <div>
+        <label for="quantity" class="block text-sm font-medium text-gray-700">Số lượng</label>
+        <input type="number" id="quantity"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          required>
+      </div>
+      <div>
+        <label for="price" class="block text-sm font-medium text-gray-700">Giá</label>
+        <input type="number" id="price"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          required>
+      </div>
+    </form>
+
+    <div class="mt-6 flex justify-end gap-2">
+      <button onclick="closeForm('orderdetailForm')"
+        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Hủy</button>
+      <button onclick="saveOrderDetail(event)" type="submit"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lưu</button>
+    </div>
+
+    <button onclick="closeForm('orderdetailForm')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+      ✕
+    </button>
+  </div>
+</div>
+  </div>
+</div>
 <!-- Footer -->
 <footer class="bg-gray-800 text-gray-200 py-6 mt-10">
   <div class="max-w-4xl mx-auto px-4 text-center space-y-2">
