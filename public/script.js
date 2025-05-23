@@ -1,7 +1,9 @@
+                
 // Hiển thị tên đăng nhập
-const username = localStorage.getItem("username");
-if (username) {
-  document.getElementById("usernameDisplay").innerText = username;
+
+const savedUsername = localStorage.getItem("loggedInUsername");
+if (savedUsername) {
+    document.getElementById("usernameDisplay").innerText = savedUsername;
 }
 
 // Toggle dropdown

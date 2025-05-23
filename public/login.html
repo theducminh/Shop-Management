@@ -29,7 +29,13 @@
             alert(username === "admin" && password === "123456" ? 
                 "Đăng nhập thành công!" : 
                 "Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.");
-            if (username === "admin" && password === "123456") window.location.href = "main.html";
+            if (username === "admin" && password === "123456") {window.location.href = "main.html";
+                 localStorage.setItem("loggedInUsername", username);
+    window.location.href = "main.html";
+            } else {
+                alert("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại."); 
+            }
+
         };
     </script>
 </body>
